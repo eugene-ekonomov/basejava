@@ -8,6 +8,9 @@ public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
     void clear() {
+        for (int i = 0; i < actualSize; i++) {
+            storage[i] = null;
+        }
         actualSize = 0;
     }
 
@@ -17,26 +20,23 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        int position = find(uuid);
-        if (position == -1) {
+        int index = find(uuid);
+        if (index == -1) {
             return null;
-        } else {
-            return storage[position];
         }
+        return storage[index];
     }
 
     void delete(String uuid) {
-        int position = find(uuid);
-        if (position >= 0) {
-            if (actualSize > 1) {
-                storage[position] = storage[actualSize - 1];
-            }
+        int index = find(uuid);
+        if (index >= 0) {
+            storage[index] = storage[actualSize - 1];
             actualSize--;
         }
     }
 
     private int find(String uuid) {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < actualSize; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return i;
             }
@@ -48,7 +48,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, actualSize);
     }
 
     int size() {
